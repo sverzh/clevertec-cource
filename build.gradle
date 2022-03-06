@@ -26,3 +26,29 @@ publishing {
         }
     }
 }
+
+
+class CustomTask extends DefaultTask {
+
+    @Input
+    String sourceUrl
+
+    @OutputFile
+    File target
+
+    @TaskAction
+    void download() {
+        try {
+            ant.get(src: sourceUrl, dest: target)
+        }
+        catch (Exception e) {
+            println(e)
+        }
+    }
+
+}
+task downloadcheckimage(type: CustomTask){
+    sourceUrl = 'https://drive.google.com/uc?export=download&id=1SEkDJtAN3AdftDVuGp2CtydNIOciP5cg'
+    target = new File('src/main/resources/checkimagefile.jpg')
+}
+
