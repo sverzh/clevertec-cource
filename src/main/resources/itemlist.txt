@@ -1,0 +1,6 @@
+Milk_1.5_false
+Bread_1_true
+Sausage_5.2_false
+Shrimps_15.1_false
+Yogurt_2.5_false
+Sour cream_2.4_false

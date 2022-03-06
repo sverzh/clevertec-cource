@@ -1,0 +1,8 @@
+запуск приложения:
+
+java -jar CheckRunner.jar <имя файла с базой товаров> <имя файла с базой скидочных карт> <параметры>
+
+Примечание: файлы должны быть вместе с CheckRunner.jar
+
+
+Пример: java -jar CheckRunner.jar itemlist.txt cardlist.txt 3-1 2-5 5-1 card-1234
