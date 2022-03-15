@@ -31,7 +31,7 @@ public class PrintReceipt {
                 Integer qty = entry.getValue();
                 double rebate = 1;
                 Item item = itemStorage.get(entry.getKey());
-                String description = item.getDescription();
+                String description = item.getName();
                 if (FileCardStorage.checkCard(cardNumber) && qty >= 5 && item.isOffer()) {
                     rebate = 0.9;
                     description = description + "(discount 10%)";
@@ -72,7 +72,7 @@ public class PrintReceipt {
                     Integer qty = entry.getValue();
                     double rebate = 1;
                     Item item = itemStorage.get(entry.getKey());
-                    String description = item.getDescription();
+                    String description = item.getName();
                     if (FileCardStorage.checkCard(cardNumber) && qty >= 5 && item.isOffer()) {
                         rebate = 0.9;
                         description = description + "(discount 10%)";

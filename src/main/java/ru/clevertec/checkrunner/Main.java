@@ -13,6 +13,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+
+
         if (args.length != 0) {
             StringParser stringParser = new StringParser(args);
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
