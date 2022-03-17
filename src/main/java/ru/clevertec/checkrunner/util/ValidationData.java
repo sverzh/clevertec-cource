@@ -7,7 +7,7 @@ public class ValidationData {
     private String[] parsedLine;
     private final String idPattern = "^[1-9][0-9]?$|^100$";
     private final String namePattern = "^[A-Z][a-z]{2,29}";
-    private final String pricePattern = "^([1-9]{1,2}[.](\\d{2})|100.00)";
+    private final String pricePattern = "^([1-9][0-9]?[.](\\d{2})\\b|100.00)";
     private final String countPattern = "^(([1-9]|1[0-9])|20)$";
 
     public ValidationData(String parseLine) {
