@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class Item {
     private final int id;
-    private String description;
+    private String name;
     private double price;
     private boolean offer;
 
-    public Item(int id, String description, double price, boolean offer) {
+    public Item(int id, String name, double price, boolean offer) {
         this.id = id;
-        this.description = description;
+        this.name = name;
         this.price = price;
         this.offer = offer;
     }
@@ -19,12 +19,12 @@ public class Item {
         return id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setName(String description) {
+        this.name = description;
     }
 
     public double getPrice() {
@@ -48,19 +48,19 @@ public class Item {
         if (this == o) return true;
         if (!(o instanceof Item)) return false;
         Item item = (Item) o;
-        return id == item.id && Double.compare(item.price, price) == 0 && offer == item.offer && Objects.equals(description, item.description);
+        return id == item.id && Double.compare(item.price, price) == 0 && offer == item.offer && Objects.equals(name, item.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, price, offer);
+        return Objects.hash(id, name, price, offer);
     }
 
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
-                ", description='" + description + '\'' +
+                ", description='" + name + '\'' +
                 ", price=" + price +
                 ", offer=" + offer +
                 '}';
