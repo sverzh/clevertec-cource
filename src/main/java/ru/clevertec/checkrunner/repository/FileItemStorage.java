@@ -16,7 +16,8 @@ public class FileItemStorage {
     }
 
     public MapStorage initItemStorage() {
-        String pathFile = new File(System.getProperty("user.dir")).getPath() + "\\" + fileName;
+//        String pathFile = new File(System.getProperty("user.dir")).getPath() + "\\" + fileName;
+        String pathFile = "src/main/resources/"+fileName;
         File file = new File(pathFile);
         try (
                 FileReader fr = new FileReader(file)) {
