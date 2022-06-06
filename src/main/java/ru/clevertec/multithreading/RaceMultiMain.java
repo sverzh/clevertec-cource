@@ -51,7 +51,7 @@ public class RaceMultiMain {
                     carDistance = (System.currentTimeMillis() - startTime) / 1000 * this.speed;
 
                     if (carDistance < distance) {
-                        System.out.println("car distance of Car-" + carNamber + " =  " + carDistance);
+                        System.out.println("Car-" + carNamber+ " has " + (distance-carDistance)+ " left to finish");
                     }
                     else break;
                 }
