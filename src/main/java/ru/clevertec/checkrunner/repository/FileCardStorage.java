@@ -3,6 +3,7 @@ package ru.clevertec.checkrunner.repository;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,8 @@ public class FileCardStorage {
     }
 
     public boolean initCardList() {
-        String pathFile = new File(System.getProperty("user.dir")).getPath() + "\\" + fileName;
+//      String pathFile = new File(System.getProperty("user.dir")).getPath() + "\\" + fileName;
+        String pathFile = "src/main/resources/"+fileName;
         File file = new File(pathFile);
         try (FileReader fr = new FileReader(file)) {
             BufferedReader reader = new BufferedReader(fr);
@@ -25,7 +27,7 @@ public class FileCardStorage {
                 line = reader.readLine();
             }
             return true;
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Something wrong with init Card Storage!!! \n" + e.getMessage());
         }
         return false;
