@@ -2,7 +2,9 @@ package ru.clevertec.checkrunner;
 
 import ru.clevertec.checkrunner.repository.FileCardStorage;
 import ru.clevertec.checkrunner.repository.FileItemStorage;
-import ru.clevertec.checkrunner.util.PrintReceipt;
+import ru.clevertec.checkrunner.service.PrintService;
+import ru.clevertec.checkrunner.service.PrintServiceInterface;
+import ru.clevertec.checkrunner.service.proxy.PrintServiceProxy;
 import ru.clevertec.checkrunner.util.StringParser;
 
 import java.io.BufferedReader;
@@ -22,14 +24,15 @@ public class Main {
             FileCardStorage cardStorage = new FileCardStorage(args[1]);
             if (cardStorage.initCardList()) {
                 System.out.print("Where to print receipt? - 1-to Console | 2 - to File : \n");
-                PrintReceipt printReceipt = new PrintReceipt(stringParser.getParsedMap(), stringParser.getCardNumber(), itemStorage.initItemStorage());
+                PrintServiceInterface printService = new PrintService(stringParser.getParsedMap(), stringParser.getCardNumber(), itemStorage.initItemStorage());
+                PrintServiceInterface printServiceProxy = new PrintServiceProxy(printService);
                 String command = reader.readLine();
                 switch (command) {
                     case "1":
-                        printReceipt.printReceiptToConsole();
+                        printServiceProxy.printReceiptToConsole();
                         break;
                     case "2":
-                        printReceipt.printReceiptToFile();
+                        printServiceProxy.printReceiptToFile();
                         break;
                     default:
                         System.out.println("Error: Wrong command");

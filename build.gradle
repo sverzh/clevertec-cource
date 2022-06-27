@@ -5,6 +5,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'io.freefair.aspectj.post-compile-weaving' version '5.3.0'
 }
 
 repositories {
@@ -54,9 +55,19 @@ task downloadcheckimage(type: CustomTask){
 
 dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.0'
 }
 
 test {
     useJUnitPlatform()
 }
 
+//task hello{
+//    println("hello")
+//}
+//
+//task goodbye(dependsOn:hello){
+//    println("goodbye")
+//}

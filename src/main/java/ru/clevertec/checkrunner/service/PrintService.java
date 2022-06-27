@@ -1,5 +1,7 @@
-package ru.clevertec.checkrunner.util;
+package ru.clevertec.checkrunner.service;
 
+import ru.clevertec.checkrunner.annotation.Log;
+import ru.clevertec.checkrunner.annotation.LoggingLevel;
 import ru.clevertec.checkrunner.model.Item;
 import ru.clevertec.checkrunner.repository.FileCardStorage;
 import ru.clevertec.checkrunner.repository.MapStorage;
@@ -9,17 +11,23 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Map;
 
-public class PrintReceipt {
+public class PrintService implements PrintServiceInterface{
+
+
     private final Map<Integer, Integer> paramsMap;
     private final MapStorage itemStorage;
     private final String cardNumber;
 
-    public PrintReceipt(Map<Integer, Integer> paramsMap, String cardNumber, MapStorage itemStorage) {
+
+    public PrintService(Map<Integer, Integer> paramsMap, String cardNumber, MapStorage itemStorage) {
         this.paramsMap = paramsMap;
         this.itemStorage = itemStorage;
         this.cardNumber = cardNumber;
     }
 
+
+
+    @Log(LoggingLevel.INFO)
     public void printReceiptToConsole() {
         checkAllIdInReceipt();
         double total = 0;
@@ -58,8 +66,8 @@ public class PrintReceipt {
             }
         }
     }
-
-    public void printReceiptToFile() throws IOException {
+    @Log(LoggingLevel.INFO)
+    public void printReceiptToFile() {
         checkAllIdInReceipt();
         String pathToFile = new File(System.getProperty("user.dir")).getPath() + "\\receipt.txt";
         try (PrintStream fw = new PrintStream(pathToFile)) {
