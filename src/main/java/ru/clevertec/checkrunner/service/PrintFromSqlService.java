@@ -15,8 +15,10 @@ public class PrintFromSqlService implements PrintServiceInterface {
     private final Map<Integer, Integer> paramsMap;
     private final String cardNumber;
     private final int cardDiscount;
-    ItemSqlStorage itemSqlStorage = new ItemSqlStorage();
-    CardNumberSqlStorage cardSqlStorage = new CardNumberSqlStorage();
+    private final ItemSqlStorage itemSqlStorage = new ItemSqlStorage();
+    private final CardNumberSqlStorage cardSqlStorage = new CardNumberSqlStorage();
+    private double total = 0;
+    private double discountTotal = 0;
 
     public PrintFromSqlService(Map<Integer, Integer> paramsMap, Card card) {
         this.paramsMap = paramsMap;
@@ -28,29 +30,10 @@ public class PrintFromSqlService implements PrintServiceInterface {
     @Log(LoggingLevel.INFO)
     public void printReceiptToConsole() {
         checkAllIdInReceipt();
-        double total = 0;
-        double discountTotal = 0;
         if (!paramsMap.isEmpty()) {
             System.out.println("-------------------------CASH RECEIPT----------------------------");
             System.out.println("QTY        DESCRIPTION                  PRICE         TOTAL");
-            for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
-                Integer qty = entry.getValue();
-                double rebate = 1;
-                Item item = itemSqlStorage.get(entry.getKey());
-                String description = item.getName();
-                if (cardSqlStorage.get(cardNumber)!=null && qty >= 5 && item.isOffer()) {
-                    rebate = 1-cardDiscount*rebate/100;
-                    description = description + "(discount "+cardDiscount+"%)";
-                }
-                double totalOfItems = item.getPrice() * qty * rebate;
-                System.out.printf("%-4s       %-20s         %.2f          %.2f\n"
-                        , qty
-                        , description
-                        , item.getPrice(), totalOfItems);
-
-                discountTotal = discountTotal + item.getPrice() * qty - totalOfItems;
-                total = total + totalOfItems;
-            }
+            calculation();
             System.out.println("-----------------------------------------------------------------");
             if (cardSqlStorage.get(cardNumber)!=null) {
                 System.out.println("Discount Card : " + cardNumber);
@@ -71,29 +54,10 @@ public class PrintFromSqlService implements PrintServiceInterface {
         checkAllIdInReceipt();
         String pathToFile = new File(System.getProperty("user.dir")).getPath() + "\\receipt.txt";
         try (PrintStream fw = new PrintStream(pathToFile)) {
-            double total = 0;
-            double discountTotal = 0;
             if (!paramsMap.isEmpty()) {
                 fw.println("-------------------------CASH RECEIPT----------------------------");
                 fw.println("QTY        DESCRIPTION                  PRICE         TOTAL");
-                for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
-                    Integer qty = entry.getValue();
-                    double rebate = 1;
-                    Item item = itemSqlStorage.get(entry.getKey());
-                    String description = item.getName();
-                    if (cardSqlStorage.get(cardNumber)!=null && qty >= 5 && item.isOffer()) {
-                        rebate = 1-cardDiscount*rebate/100;
-                        description = description + "(discount "+cardDiscount+"%)";
-                    }
-                    double totalOfItems = item.getPrice() * qty * rebate;
-                    fw.printf("%-4s       %-20s         %.2f          %.2f\n"
-                            , qty
-                            , description
-                            , item.getPrice(), totalOfItems);
-
-                    discountTotal = discountTotal + item.getPrice() * qty - totalOfItems;
-                    total = total + totalOfItems;
-                }
+                calculation();
                 fw.println("-----------------------------------------------------------------");
                 if (cardSqlStorage.get(cardNumber)!=null) {
                     fw.println("Discount Card : " + cardNumber);
@@ -118,6 +82,27 @@ public class PrintFromSqlService implements PrintServiceInterface {
             if (item == null) {
                 throw new RuntimeException("Item not found");
             }
+        }
+
+    }
+    private void calculation(){
+        for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
+            Integer qty = entry.getValue();
+            double rebate = 1;
+            Item item = itemSqlStorage.get(entry.getKey());
+            String description = item.getName();
+            if (cardSqlStorage.get(cardNumber)!=null && qty >= 5 && item.isOffer()) {
+                rebate = 1-cardDiscount*rebate/100;
+                description = description + "(discount "+cardDiscount+"%)";
+            }
+            double totalOfItems = item.getPrice() * qty * rebate;
+            System.out.printf("%-4s       %-20s         %.2f          %.2f\n"
+                    , qty
+                    , description
+                    , item.getPrice(), totalOfItems);
+
+            discountTotal = discountTotal + item.getPrice() * qty - totalOfItems;
+            total = total + totalOfItems;
         }
     }
 }
