@@ -2,27 +2,29 @@ package ru.clevertec.checkrunner.service;
 
 import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
+import ru.clevertec.checkrunner.model.Card;
 import ru.clevertec.checkrunner.model.Item;
-import ru.clevertec.checkrunner.repository.FileCardStorage;
-import ru.clevertec.checkrunner.repository.MapStorage;
+import ru.clevertec.checkrunner.repository.CardNumberSqlStorage;
+import ru.clevertec.checkrunner.repository.ItemSqlStorage;
 
 import java.io.File;
-
 import java.io.PrintStream;
 import java.util.Map;
 
-public class PrintService implements PrintServiceInterface {
-
+public class PrintFromSqlService implements PrintServiceInterface {
     private final Map<Integer, Integer> paramsMap;
-    private final MapStorage itemStorage;
     private final String cardNumber;
+    private final int cardDiscount;
+    ItemSqlStorage itemSqlStorage = new ItemSqlStorage();
+    CardNumberSqlStorage cardSqlStorage = new CardNumberSqlStorage();
 
-    public PrintService(Map<Integer, Integer> paramsMap, String cardNumber, MapStorage itemStorage) {
+    public PrintFromSqlService(Map<Integer, Integer> paramsMap, Card card) {
         this.paramsMap = paramsMap;
-        this.itemStorage = itemStorage;
-        this.cardNumber = cardNumber;
+        this.cardNumber = card.getCardNumber();
+        this.cardDiscount= card.getDiscount();
     }
 
+    @Override
     @Log(LoggingLevel.INFO)
     public void printReceiptToConsole() {
         checkAllIdInReceipt();
@@ -34,11 +36,11 @@ public class PrintService implements PrintServiceInterface {
             for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
                 Integer qty = entry.getValue();
                 double rebate = 1;
-                Item item = itemStorage.get(entry.getKey());
+                Item item = itemSqlStorage.get(entry.getKey());
                 String description = item.getName();
-                if (FileCardStorage.checkCard(cardNumber) && qty >= 5 && item.isOffer()) {
-                    rebate = 0.9;
-                    description = description + "(discount 10%)";
+                if (cardSqlStorage.get(cardNumber)!=null && qty >= 5 && item.isOffer()) {
+                    rebate = 1-cardDiscount*rebate/100;
+                    description = description + "(discount "+cardDiscount+"%)";
                 }
                 double totalOfItems = item.getPrice() * qty * rebate;
                 System.out.printf("%-4s       %-20s         %.2f          %.2f\n"
@@ -50,20 +52,21 @@ public class PrintService implements PrintServiceInterface {
                 total = total + totalOfItems;
             }
             System.out.println("-----------------------------------------------------------------");
-            if (FileCardStorage.checkCard(cardNumber)) {
+            if (cardSqlStorage.get(cardNumber)!=null) {
                 System.out.println("Discount Card : " + cardNumber);
             }
             if (discountTotal != 0) {
-                System.out.println("DISCOUNT:                                             -" + discountTotal);
+                System.out.printf("DISCOUNT:                                             %.2f\n", discountTotal);
             }
             System.out.println("TOTAL:                                                " + total);
-            if (!FileCardStorage.checkCard(cardNumber) && cardNumber != null) {
+            if (cardSqlStorage.get(cardNumber)==null && cardNumber != null) {
                 System.out.println("Notice: Card with number " + cardNumber + " not found!");
             }
         }
     }
 
-    @Log(LoggingLevel.INFO)
+
+    @Override
     public void printReceiptToFile() {
         checkAllIdInReceipt();
         String pathToFile = new File(System.getProperty("user.dir")).getPath() + "\\receipt.txt";
@@ -76,11 +79,11 @@ public class PrintService implements PrintServiceInterface {
                 for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
                     Integer qty = entry.getValue();
                     double rebate = 1;
-                    Item item = itemStorage.get(entry.getKey());
+                    Item item = itemSqlStorage.get(entry.getKey());
                     String description = item.getName();
-                    if (FileCardStorage.checkCard(cardNumber) && qty >= 5 && item.isOffer()) {
-                        rebate = 0.9;
-                        description = description + "(discount 10%)";
+                    if (cardSqlStorage.get(cardNumber)!=null && qty >= 5 && item.isOffer()) {
+                        rebate = 1-cardDiscount*rebate/100;
+                        description = description + "(discount "+cardDiscount+"%)";
                     }
                     double totalOfItems = item.getPrice() * qty * rebate;
                     fw.printf("%-4s       %-20s         %.2f          %.2f\n"
@@ -92,14 +95,14 @@ public class PrintService implements PrintServiceInterface {
                     total = total + totalOfItems;
                 }
                 fw.println("-----------------------------------------------------------------");
-                if (FileCardStorage.checkCard(cardNumber)) {
+                if (cardSqlStorage.get(cardNumber)!=null) {
                     fw.println("Discount Card : " + cardNumber);
                 }
                 if (discountTotal != 0) {
-                    fw.println("DISCOUNT:                                             -" + discountTotal);
+                    fw.printf("DISCOUNT:                                              %.2f\n", discountTotal);
                 }
                 fw.println("TOTAL:                                                " + total);
-                if (!FileCardStorage.checkCard(cardNumber) && cardNumber != null) {
+                if (cardSqlStorage.get(cardNumber)==null && cardNumber != null) {
                     System.out.println("Notice: Card with number " + cardNumber + " not found!");
                 }
             }
@@ -111,7 +114,7 @@ public class PrintService implements PrintServiceInterface {
 
     private void checkAllIdInReceipt() {
         for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
-            Item item = itemStorage.get(entry.getKey());
+            Item item = itemSqlStorage.get(entry.getKey());
             if (item == null) {
                 throw new RuntimeException("Item not found");
             }

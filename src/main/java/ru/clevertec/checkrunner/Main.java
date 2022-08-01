@@ -15,8 +15,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-
-
         if (args.length != 0) {
             StringParser stringParser = new StringParser(args);
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -24,7 +22,7 @@ public class Main {
             FileCardStorage cardStorage = new FileCardStorage(args[1]);
             if (cardStorage.initCardList()) {
                 System.out.print("Where to print receipt? - 1-to Console | 2 - to File : \n");
-                PrintServiceInterface printService = new PrintService(stringParser.getParsedMap(), stringParser.getCardNumber(), itemStorage.initItemStorage());
+                PrintServiceInterface printService = new PrintService(stringParser.getParsedMap(), stringParser.getCard().getCardNumber(), itemStorage.initItemStorage());
                 PrintServiceInterface printServiceProxy = new PrintServiceProxy(printService);
                 String command = reader.readLine();
                 switch (command) {
