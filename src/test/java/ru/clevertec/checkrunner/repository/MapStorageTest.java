@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.clevertec.checkrunner.model.Item;
-
-import static org.junit.jupiter.api.Assertions.*;
+import ru.clevertec.checkrunner.repository.filestorage.MapStorage;
 
 class MapStorageTest {
     MapStorage mapStorage = new MapStorage();

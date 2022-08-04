@@ -1,7 +1,7 @@
 package ru.clevertec.checkrunner.util;
 
 import org.junit.jupiter.api.Test;
-import ru.clevertec.checkrunner.repository.FileItemStorage;
+import ru.clevertec.checkrunner.repository.filestorage.FileItemStorage;
 import ru.clevertec.checkrunner.service.PrintService;
 import ru.clevertec.checkrunner.service.PrintServiceInterface;
 import ru.clevertec.checkrunner.service.proxy.PrintServiceProxy;

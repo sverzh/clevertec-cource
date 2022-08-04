@@ -4,7 +4,7 @@ import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
 import ru.clevertec.checkrunner.model.Card;
 import ru.clevertec.checkrunner.model.Item;
-import ru.clevertec.checkrunner.repository.CardNumberSqlStorage;
+import ru.clevertec.checkrunner.repository.CardSqlStorage;
 import ru.clevertec.checkrunner.repository.ItemSqlStorage;
 
 import java.io.File;
@@ -16,7 +16,7 @@ public class PrintFromSqlService implements PrintServiceInterface {
     private final String cardNumber;
     private final int cardDiscount;
     private final ItemSqlStorage itemSqlStorage = new ItemSqlStorage();
-    private final CardNumberSqlStorage cardSqlStorage = new CardNumberSqlStorage();
+    private final CardSqlStorage cardSqlStorage = new CardSqlStorage();
     private double total = 0;
     private double discountTotal = 0;
 

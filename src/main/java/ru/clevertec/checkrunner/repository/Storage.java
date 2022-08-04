@@ -2,8 +2,12 @@ package ru.clevertec.checkrunner.repository;
 
 import ru.clevertec.checkrunner.model.Item;
 
-public interface Storage {
-    Item get(int id);
+import java.util.List;
 
-    void save(Item item);
+public interface Storage<T> {
+    T get(int id);
+    void save(T entity);
+    void update(T entity);
+    void delete(int id);
+    List<T> findAll();
 }

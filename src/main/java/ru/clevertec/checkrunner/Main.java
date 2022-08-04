@@ -1,7 +1,7 @@
 package ru.clevertec.checkrunner;
 
-import ru.clevertec.checkrunner.repository.FileCardStorage;
-import ru.clevertec.checkrunner.repository.FileItemStorage;
+import ru.clevertec.checkrunner.repository.filestorage.FileCardStorage;
+import ru.clevertec.checkrunner.repository.filestorage.FileItemStorage;
 import ru.clevertec.checkrunner.service.PrintService;
 import ru.clevertec.checkrunner.service.PrintServiceInterface;
 import ru.clevertec.checkrunner.service.proxy.PrintServiceProxy;

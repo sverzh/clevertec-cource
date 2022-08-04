@@ -3,8 +3,8 @@ package ru.clevertec.checkrunner.service;
 import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
 import ru.clevertec.checkrunner.model.Item;
-import ru.clevertec.checkrunner.repository.FileCardStorage;
-import ru.clevertec.checkrunner.repository.MapStorage;
+import ru.clevertec.checkrunner.repository.filestorage.FileCardStorage;
+import ru.clevertec.checkrunner.repository.filestorage.MapStorage;
 
 import java.io.File;
 

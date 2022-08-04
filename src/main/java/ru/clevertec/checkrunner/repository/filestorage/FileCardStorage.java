@@ -1,4 +1,4 @@
-package ru.clevertec.checkrunner.repository;
+package ru.clevertec.checkrunner.repository.filestorage;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,18 +1,19 @@
 package ru.clevertec.checkrunner.repository;
 
 
+import ru.clevertec.checkrunner.exception.StorageException;
 import ru.clevertec.checkrunner.model.Card;
-
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CardNumberSqlStorage extends SqlStorage {
+public class CardSqlStorage extends SqlStorage {
 
-    public CardNumberSqlStorage() {
+    public CardSqlStorage() {
         super();
     }
-
 
     public Card get(String cardNumber) {
         return sqlHelper.transactionalExecute(conn -> {
@@ -23,12 +24,10 @@ public class CardNumberSqlStorage extends SqlStorage {
                 if (!rs.next()) {
 //                    System.out.println(cardNumber+" - not found in database");
                     card = null;
-                }
-                else {
+                } else {
                     card = new Card(rs.getString("cardnumber"));
                 }
             }
-
             return card;
         });
     }
@@ -43,5 +42,31 @@ public class CardNumberSqlStorage extends SqlStorage {
             }
             return null;
         });
+    }
+
+
+    public void delete(String cardnumber) {
+        sqlHelper.execute("DELETE FROM cardnumbers i WHERE i.cardnumber=?", ps -> {
+            ps.setString(1, cardnumber);
+            if (ps.executeUpdate() == 0) {
+                throw new StorageException("Card -" + cardnumber + " not found in database");
+            }
+            return null;
+        });
+    }
+
+    public List<Card> findAll() {
+        List<Card> cardList = new ArrayList<>();
+        sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM cardnumbers")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Card card = new Card(rs.getString("cardnumber"));
+                    cardList.add(card);
+                }
+            }
+            return null;
+        });
+        return cardList;
     }
 }

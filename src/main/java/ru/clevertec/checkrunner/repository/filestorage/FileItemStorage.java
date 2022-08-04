@@ -1,4 +1,4 @@
-package ru.clevertec.checkrunner.repository;
+package ru.clevertec.checkrunner.repository.filestorage;
 
 import ru.clevertec.checkrunner.model.Item;
 
