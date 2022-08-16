@@ -22,7 +22,7 @@ class FileCardStorageTest {
 
     @Test
     void checkCard() {
-        String cardNumber = "1004";
+        int cardNumber = 1004;
         cardStorage.initCardList();
         Assertions.assertTrue(FileCardStorage.checkCard(cardNumber));
     }

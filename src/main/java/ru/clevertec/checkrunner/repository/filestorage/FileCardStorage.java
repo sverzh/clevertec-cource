@@ -33,7 +33,7 @@ public class FileCardStorage {
         return false;
     }
 
-    public static boolean checkCard(String cardNumber) {
+    public static boolean checkCard(int cardNumber) {
         return cardList.contains(cardNumber);
     }
 

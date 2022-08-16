@@ -26,7 +26,7 @@ public class FileItemStorage {
             while (line != null) {
                 String[] parseLine = line.split("_");
                 id++;
-                itemStorage.save(new Item(id, parseLine[0], Double.parseDouble(parseLine[1]), parseLine[2].equals("true")));
+                itemStorage.add(new Item(id, parseLine[0], Double.parseDouble(parseLine[1]), parseLine[2].equals("true")));
                 line = reader.readLine();
             }
         } catch (Exception e) {

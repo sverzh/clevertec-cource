@@ -15,7 +15,7 @@ class MapStorageTest {
     static void fillStorage(){
         MapStorage mapStorage = new MapStorage();
         Item item1 = new Item(1, "Chocolate", 5, false);
-        mapStorage.save(item1);
+        mapStorage.add(item1);
     }
 
     @Test
@@ -25,7 +25,7 @@ class MapStorageTest {
 
     @Test
     void save() {
-        mapStorage.save(ITEM2);
+        mapStorage.add(ITEM2);
         Assertions.assertEquals(mapStorage.get(2), ITEM2);
     }
 }

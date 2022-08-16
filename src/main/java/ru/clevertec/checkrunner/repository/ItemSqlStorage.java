@@ -34,7 +34,7 @@ public class ItemSqlStorage extends SqlStorage implements Storage<Item> {
 
 
     @Override
-    public void save(Item item) {
+    public void add(Item item) {
         sqlHelper.transactionalExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("INSERT INTO items (id, name, price, offer) VALUES(?,?,?,?)")) {
                 ps.setInt(1, item.getId());

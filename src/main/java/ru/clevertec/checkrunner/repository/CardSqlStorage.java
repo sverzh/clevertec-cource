@@ -15,28 +15,28 @@ public class CardSqlStorage extends SqlStorage {
         super();
     }
 
-    public Card get(String cardNumber) {
+    public Card get(int cardNumber) {
         return sqlHelper.transactionalExecute(conn -> {
             Card card;
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM cardnumbers where cardNumber=?")) {
-                ps.setString(1, cardNumber);
+                ps.setInt(1, cardNumber);
                 ResultSet rs = ps.executeQuery();
                 if (!rs.next()) {
 //                    System.out.println(cardNumber+" - not found in database");
                     card = null;
                 } else {
-                    card = new Card(rs.getString("cardnumber"));
+                    card = new Card(rs.getInt("cardnumber"));
                 }
             }
             return card;
         });
     }
 
-    public void save(Card card) {
+    public void add(Card card) {
         sqlHelper.transactionalExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("INSERT INTO cardnumbers (cardnumber) VALUES(?)")) {
                 if (get(card.getCardNumber()) == null) {
-                    ps.setString(1, card.getCardNumber());
+                    ps.setInt(1, card.getCardNumber());
                     ps.execute();
                 }
             }
@@ -45,9 +45,9 @@ public class CardSqlStorage extends SqlStorage {
     }
 
 
-    public void delete(String cardnumber) {
+    public void delete(int cardnumber) {
         sqlHelper.execute("DELETE FROM cardnumbers i WHERE i.cardnumber=?", ps -> {
-            ps.setString(1, cardnumber);
+            ps.setInt(1, cardnumber);
             if (ps.executeUpdate() == 0) {
                 throw new StorageException("Card -" + cardnumber + " not found in database");
             }
@@ -61,7 +61,7 @@ public class CardSqlStorage extends SqlStorage {
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM cardnumbers")) {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    Card card = new Card(rs.getString("cardnumber"));
+                    Card card = new Card(rs.getInt("cardnumber"));
                     cardList.add(card);
                 }
             }

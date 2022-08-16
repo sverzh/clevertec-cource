@@ -23,7 +23,7 @@ public class PrintServiceProxy implements PrintServiceInterface {
     }
 
     @Override
-    public void printReceiptToFile() {
+    public void printReceiptToFile() throws Exception{
         printService.printReceiptToFile();
         System.out.println("Proxy Working");
     }

@@ -15,9 +15,9 @@ public class PrintService implements PrintServiceInterface {
 
     private final Map<Integer, Integer> paramsMap;
     private final MapStorage itemStorage;
-    private final String cardNumber;
+    private final int cardNumber;
 
-    public PrintService(Map<Integer, Integer> paramsMap, String cardNumber, MapStorage itemStorage) {
+    public PrintService(Map<Integer, Integer> paramsMap, int cardNumber, MapStorage itemStorage) {
         this.paramsMap = paramsMap;
         this.itemStorage = itemStorage;
         this.cardNumber = cardNumber;
@@ -57,7 +57,7 @@ public class PrintService implements PrintServiceInterface {
                 System.out.println("DISCOUNT:                                             -" + discountTotal);
             }
             System.out.println("TOTAL:                                                " + total);
-            if (!FileCardStorage.checkCard(cardNumber) && cardNumber != null) {
+            if (!FileCardStorage.checkCard(cardNumber) && cardNumber != 0) {
                 System.out.println("Notice: Card with number " + cardNumber + " not found!");
             }
         }
@@ -99,7 +99,7 @@ public class PrintService implements PrintServiceInterface {
                     fw.println("DISCOUNT:                                             -" + discountTotal);
                 }
                 fw.println("TOTAL:                                                " + total);
-                if (!FileCardStorage.checkCard(cardNumber) && cardNumber != null) {
+                if (!FileCardStorage.checkCard(cardNumber) && cardNumber != 0) {
                     System.out.println("Notice: Card with number " + cardNumber + " not found!");
                 }
             }

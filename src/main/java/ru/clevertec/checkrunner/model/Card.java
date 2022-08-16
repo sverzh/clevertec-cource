@@ -1,15 +1,17 @@
 package ru.clevertec.checkrunner.model;
 
 public class Card {
-    private final String cardNumber;
 
+
+    private final int cardNumber;
     private int discount=5;
 
-    public Card(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public Card(int cardnumber) {
+        this.cardNumber=cardnumber;
     }
 
-    public String getCardNumber() {
+
+    public int getCardNumber() {
         return cardNumber;
     }
 
@@ -28,13 +30,13 @@ public class Card {
 
         Card card = (Card) o;
 
-        if (discount != card.discount) return false;
-        return cardNumber != null ? cardNumber.equals(card.cardNumber) : card.cardNumber == null;
+        if (cardNumber != card.cardNumber) return false;
+        return discount == card.discount;
     }
 
     @Override
     public int hashCode() {
-        int result = cardNumber != null ? cardNumber.hashCode() : 0;
+        int result = cardNumber;
         result = 31 * result + discount;
         return result;
     }
@@ -42,7 +44,7 @@ public class Card {
     @Override
     public String toString() {
         return "Card{" +
-                "cardNumber='" + cardNumber + '\'' +
+                "cardNumber=" + cardNumber +
                 ", discount=" + discount +
                 '}';
     }

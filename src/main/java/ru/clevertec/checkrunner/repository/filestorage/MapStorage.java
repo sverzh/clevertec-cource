@@ -16,7 +16,7 @@ public class MapStorage implements Storage<Item> {
     }
 
     @Override
-    public void save(Item item) {
+    public void add(Item item) {
         map.put(item.getId(), item);
     }
 
