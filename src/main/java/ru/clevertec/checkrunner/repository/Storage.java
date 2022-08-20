@@ -1,7 +1,5 @@
 package ru.clevertec.checkrunner.repository;
 
-import ru.clevertec.checkrunner.model.Item;
-
 import java.util.List;
 
 public interface Storage<T> {
@@ -9,5 +7,5 @@ public interface Storage<T> {
     void add(T entity);
     void update(T entity);
     void delete(int id);
-    List<T> findAll();
+    List<T> findAll(String size, String page);
 }

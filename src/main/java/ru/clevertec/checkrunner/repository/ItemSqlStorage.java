@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemSqlStorage extends SqlStorage implements Storage<Item> {
+    private static final Integer PAGE_SIZE_DEFAULT = 20;
+    private static final Integer PAGES_DEFAULT = 0;
 
     public ItemSqlStorage() {
         super();
@@ -77,10 +79,14 @@ public class ItemSqlStorage extends SqlStorage implements Storage<Item> {
     }
 
     @Override
-    public List<Item> findAll() {
+    public List<Item> findAll(String size, String page) {
         Map<Integer, Item> items = new LinkedHashMap<>();
         sqlHelper.transactionalExecute(conn -> {
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM items")) {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM items LIMIT ? OFFSET ?")) {
+                int pageSize = size != null ? Integer.parseInt(size) : PAGE_SIZE_DEFAULT;
+                int pageNumber = page != null ? (Integer.parseInt(page) * pageSize) : PAGES_DEFAULT;
+                ps.setInt(1,pageSize);
+                ps.setInt(2,pageNumber);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     int id = rs.getInt("id");

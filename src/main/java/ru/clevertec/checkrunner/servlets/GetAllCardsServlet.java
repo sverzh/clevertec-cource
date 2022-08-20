@@ -21,8 +21,9 @@ public class GetAllCardsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        List<Card> cards = cardSqlStorage.findAll();
+        String size = req.getParameter("size");
+        String page = req.getParameter("page");
+        List<Card> cards = cardSqlStorage.findAll(size,page);
         String json = new Gson().toJson(cards);
         try (PrintWriter writer = resp.getWriter()) {
             writer.write(json);

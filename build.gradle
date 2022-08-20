@@ -6,6 +6,7 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'io.freefair.aspectj.post-compile-weaving' version '5.3.0'
+    id 'org.liquibase.gradle' version '2.0.4'
 }
 
 repositories {
@@ -60,11 +61,33 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.0'
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.4.0'
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
+// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.3'
+
+    liquibaseRuntime 'org.postgresql:postgresql:42.3.6'
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.14.0'
 }
 
 test {
     useJUnitPlatform()
 }
+
+task('deploy') {
+    liquibase {
+        activities {
+            main {
+                changeLogFile "src/main/resources/db/changelog/db.changelog-master.xml"
+                url "jdbc:postgresql://localhost:5432/postgres"
+                username "postgres"
+                password "postgres"
+            }
+        }
+    }
+}
+compileJava.dependsOn(update).dependsOn(deploy)
 
 //task hello{
 //    println("hello")

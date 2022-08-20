@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet("/api/item/")
-public class GetItemServlet extends HttpServlet {
+public class ItemServlet extends HttpServlet {
     final ItemSqlStorage itemSqlStorage = new ItemSqlStorage();
 
     @Override
@@ -29,6 +29,16 @@ public class GetItemServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         itemSqlStorage.delete(Integer.parseInt(req.getParameter("id")));
-            resp.setStatus(200);
+        resp.setStatus(200);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Item source = new Gson().fromJson(req.getReader(), Item.class);
+        itemSqlStorage.add(source);
+        try (PrintWriter writer = resp.getWriter()) {
+            writer.write(source.toString());
+            resp.setStatus(201);
+        }
     }
 }

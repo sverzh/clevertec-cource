@@ -22,7 +22,6 @@ public class PrintFromSqlService implements PrintServiceInterface {
     private double discountTotal = 0;
     PrintStream fw;
     String pathToFile = new File(System.getProperty("user.dir")).getPath() + "\\receipt.txt";
-    String pathToPdfFile = new File(System.getProperty("user.dir")).getPath() + "\\receipt1.pdf";
 
     public PrintFromSqlService(Map<Integer, Integer> paramsMap, Card card) {
         this.paramsMap = paramsMap;
@@ -39,7 +38,7 @@ public class PrintFromSqlService implements PrintServiceInterface {
             System.out.println("QTY        DESCRIPTION                  PRICE         TOTAL");
             calculation();
             System.out.println("-----------------------------------------------------------------");
-            if (cardSqlStorage.get(cardNumber)==null) {
+            if (cardSqlStorage.get(cardNumber)!=null) {
                 System.out.println("Discount Card : " + cardNumber);
             }
             if (discountTotal != 0) {

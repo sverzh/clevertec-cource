@@ -19,8 +19,9 @@ public class GetIAllItemsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        List<Item> itemList = itemSqlStorage.findAll();
+        String size = req.getParameter("size");
+        String page = req.getParameter("page");
+        List<Item> itemList = itemSqlStorage.findAll(size, page);
         String json = new Gson().toJson(itemList);
         try (PrintWriter writer = resp.getWriter()) {
             writer.write(json);

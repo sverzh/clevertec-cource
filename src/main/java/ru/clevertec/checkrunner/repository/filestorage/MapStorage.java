@@ -7,29 +7,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapStorage implements Storage<Item> {
+public class MapStorage  {
     private final static Map<Integer, Item> map = new HashMap<>();
 
-    @Override
+
     public Item get(int id) {
         return map.get(id);
     }
 
-    @Override
+
     public void add(Item item) {
         map.put(item.getId(), item);
     }
 
-    @Override
+
     public void update(Item item) {
     }
 
-    @Override
+
     public void delete(int id) {
 
     }
 
-    @Override
+
     public List<Item> findAll() {
         return null;
     }
