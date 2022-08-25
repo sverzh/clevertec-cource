@@ -89,7 +89,7 @@ public class PrintPdfService {
                     table3.addCell(setTextCenter(String.format("                            %.2f", discountTotal)));
                 }
                 table3.addCell(setTextLeft("TOTAL: "));
-                table3.addCell(setTextCenter(String.format("                        %.2f",total)));
+                table3.addCell(setTextCenter(String.format("                        %.2f", total)));
 
                 if (cardSqlStorage.get(cardNumber) == null && cardNumber != 0) {
                     cell = new PdfPCell(new Paragraph("Notice: Card with number " + cardNumber + " not found!"));
@@ -117,7 +117,7 @@ public class PrintPdfService {
             double rebate = 1;
             Item item = itemSqlStorage.get(entry.getKey());
             String description = item.getName();
-            if (cardSqlStorage.get(cardNumber) !=null && qty >= 5 && item.isOffer()) {
+            if (cardSqlStorage.get(cardNumber) != null && qty >= 5 && item.isOffer()) {
                 rebate = 1 - cardDiscount * rebate / 100;
                 description = description + "(discount " + cardDiscount + "%)";
             }

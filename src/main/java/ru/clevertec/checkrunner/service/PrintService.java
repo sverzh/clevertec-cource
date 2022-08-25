@@ -7,7 +7,6 @@ import ru.clevertec.checkrunner.repository.filestorage.FileCardStorage;
 import ru.clevertec.checkrunner.repository.filestorage.MapStorage;
 
 import java.io.File;
-
 import java.io.PrintStream;
 import java.util.Map;
 
