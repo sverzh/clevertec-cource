@@ -1,9 +1,11 @@
 package ru.clevertec.checkrunner.util;
 
+import org.springframework.stereotype.Component;
 import ru.clevertec.checkrunner.model.Card;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class StringParser {
     private final String[] inputData;

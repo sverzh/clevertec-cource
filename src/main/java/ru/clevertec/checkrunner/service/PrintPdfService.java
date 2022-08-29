@@ -5,10 +5,13 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import org.springframework.stereotype.Service;
 import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
 import ru.clevertec.checkrunner.model.Card;
 import ru.clevertec.checkrunner.model.Item;
+import ru.clevertec.checkrunner.model.Receipt;
 import ru.clevertec.checkrunner.repository.CardSqlStorage;
 import ru.clevertec.checkrunner.repository.ItemSqlStorage;
 
@@ -20,10 +23,15 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+@Service
 public class PrintPdfService {
-    private final Map<Integer, Integer> paramsMap;
-    private final ItemSqlStorage itemSqlStorage = new ItemSqlStorage();
-    private final CardSqlStorage cardSqlStorage = new CardSqlStorage();
+    private Receipt receipt;
+
+    private final ItemSqlStorage itemSqlStorage;
+
+    private final CardSqlStorage cardSqlStorage;
+
+
     private final int cardNumber;
     private final int cardDiscount;
     private double total = 0;
@@ -33,22 +41,26 @@ public class PrintPdfService {
     float[] widths2 = {50f, 150f, 50f, 50f};
     PdfPTable table2 = new PdfPTable(widths2);
 
-    public PrintPdfService(Map<Integer, Integer> paramsMap, Card card) {
-        this.paramsMap = paramsMap;
+
+
+    public PrintPdfService(Receipt receipt, ItemSqlStorage itemSqlStorage, CardSqlStorage cardSqlStorage, Card card) {
+        this.receipt = receipt;
+        this.itemSqlStorage = itemSqlStorage;
+        this.cardSqlStorage = cardSqlStorage;
         this.cardNumber = card.getCardNumber();
         this.cardDiscount = card.getDiscount();
     }
 
 
     @Log(LoggingLevel.INFO)
-    public void printReceiptToPdf() throws IOException {
+    public void printReceiptToPdf(Receipt receipt) throws IOException {
 
         checkAllIdInReceipt();
 
         try {
             PdfWriter.getInstance(document, new FileOutputStream(pathToFile));
             document.open();
-            if (!paramsMap.isEmpty()) {
+            if (!receipt.getItems().isEmpty()) {
                 float[] widths1 = {200F};
                 PdfPTable table1 = new PdfPTable(widths1);
                 PdfPCell cell;
@@ -112,7 +124,7 @@ public class PrintPdfService {
 
 
     private void calculation() {
-        for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : receipt.getItems().entrySet()) {
             Integer qty = entry.getValue();
             double rebate = 1;
             Item item = itemSqlStorage.get(entry.getKey());
@@ -134,7 +146,7 @@ public class PrintPdfService {
     }
 
     private void checkAllIdInReceipt() {
-        for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : receipt.getItems().entrySet()) {
             Item item = itemSqlStorage.get(entry.getKey());
             if (item == null) {
                 throw new RuntimeException("Item not found");

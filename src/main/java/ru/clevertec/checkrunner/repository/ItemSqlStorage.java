@@ -1,5 +1,6 @@
 package ru.clevertec.checkrunner.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.clevertec.checkrunner.exception.StorageException;
 import ru.clevertec.checkrunner.model.Item;
 
@@ -10,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public class ItemSqlStorage extends SqlStorage implements Storage<Item> {
     private static final Integer PAGE_SIZE_DEFAULT = 20;
     private static final Integer PAGES_DEFAULT = 0;

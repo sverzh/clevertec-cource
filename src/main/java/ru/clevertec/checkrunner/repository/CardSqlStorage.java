@@ -1,6 +1,7 @@
 package ru.clevertec.checkrunner.repository;
 
 
+import org.springframework.stereotype.Repository;
 import ru.clevertec.checkrunner.exception.StorageException;
 import ru.clevertec.checkrunner.model.Card;
 import ru.clevertec.checkrunner.model.Item;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class CardSqlStorage extends SqlStorage implements Storage<Card> {
     private static final Integer PAGE_SIZE_DEFAULT = 20;
     private static final Integer PAGES_DEFAULT = 0;
