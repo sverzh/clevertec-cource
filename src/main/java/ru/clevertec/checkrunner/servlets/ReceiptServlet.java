@@ -21,7 +21,7 @@ import java.io.OutputStream;
 @RequiredArgsConstructor
 public class ReceiptServlet extends HttpServlet {
     private final PrintPdfService pdfService;
-    private  Receipt receipt;
+    private Receipt receipt;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

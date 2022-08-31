@@ -17,7 +17,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class GetIAllItemsServlet extends HttpServlet {
+public class GetAllItemsServlet extends HttpServlet {
     final ItemSqlStorage itemSqlStorage;
 
     @Override

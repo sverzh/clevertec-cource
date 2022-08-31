@@ -5,11 +5,9 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
 import org.springframework.stereotype.Service;
 import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
-import ru.clevertec.checkrunner.model.Card;
 import ru.clevertec.checkrunner.model.Item;
 import ru.clevertec.checkrunner.model.Receipt;
 import ru.clevertec.checkrunner.repository.CardSqlStorage;
@@ -26,37 +24,25 @@ import java.util.Map;
 @Service
 public class PrintPdfService {
     private Receipt receipt;
-
     private final ItemSqlStorage itemSqlStorage;
-
     private final CardSqlStorage cardSqlStorage;
-
-
-    private final int cardNumber;
-    private final int cardDiscount;
-    private double total = 0;
-    private double discountTotal = 0;
     private final String pathToFile = new File("D:\\project\\src\\main\\resources\\receipt.pdf").getPath();
-    Document document = new Document(PageSize.A5);
-    float[] widths2 = {50f, 150f, 50f, 50f};
-    PdfPTable table2 = new PdfPTable(widths2);
 
-
-
-    public PrintPdfService(Receipt receipt, ItemSqlStorage itemSqlStorage, CardSqlStorage cardSqlStorage, Card card) {
-        this.receipt = receipt;
+    public PrintPdfService(ItemSqlStorage itemSqlStorage, CardSqlStorage cardSqlStorage) {
         this.itemSqlStorage = itemSqlStorage;
         this.cardSqlStorage = cardSqlStorage;
-        this.cardNumber = card.getCardNumber();
-        this.cardDiscount = card.getDiscount();
     }
 
 
     @Log(LoggingLevel.INFO)
     public void printReceiptToPdf(Receipt receipt) throws IOException {
-
+        this.receipt = receipt;
+        int cardNumber = receipt.getCard().getNumber();
+        int cardDiscount = receipt.getCard().getDiscount();
+        double total = 0;
+        double discountTotal = 0;
         checkAllIdInReceipt();
-
+        Document document = new Document(PageSize.A5);
         try {
             PdfWriter.getInstance(document, new FileOutputStream(pathToFile));
             document.open();
@@ -74,22 +60,43 @@ public class PrintPdfService {
                 table1.addCell(setTextRight(date.format(formatterDate)));
                 table1.addCell(setTextRight(time.format(formatterTime)));
                 table1.addCell(setTextCenter("-------------------------------------------------------------------"));
-
+                float[] widths2 = {50f, 150f, 50f, 50f};
+                PdfPTable table2 = new PdfPTable(widths2);
                 table2.addCell(setTextLeft("QTY"));
                 table2.addCell(setTextLeft("DESCRIPTION"));
                 table2.addCell(setTextLeft("PRICE"));
                 table2.addCell(setTextLeft("TOTAL"));
 
+                float[] widths4 = {50f, 150f, 50f, 50f};
+                PdfPTable table4 = new PdfPTable(widths4);
+                for (Map.Entry<Integer, Integer> entry : receipt.getItems().entrySet()) {
+                    Integer qty = entry.getValue();
+                    double rebate = 1;
+                    Item item = itemSqlStorage.get(entry.getKey());
+                    String description = item.getName();
+                    if (cardSqlStorage.get(cardNumber) != null && qty >= 5 && item.isOffer()) {
+                        rebate = 1 - cardDiscount * rebate / 100;
+                        description = description + "(discount " + cardDiscount + "%)";
+                    }
+                    double totalOfItems = item.getPrice() * qty * rebate;
 
-                calculation();
+                    table4.addCell(setTextLeft(String.valueOf(qty)));
+                    table4.addCell(setTextLeft(description));
+                    table4.addCell(setTextLeft(String.format("%.2f", item.getPrice())));
+                    table4.addCell(setTextLeft(String.format("%.2f", totalOfItems)));
+
+                    discountTotal = discountTotal + item.getPrice() * qty - totalOfItems;
+                    total = total + totalOfItems;
+                }
+
                 cell = new PdfPCell(new Paragraph("======================================="));
                 cell.setBorder(Rectangle.NO_BORDER);
                 cell.setColspan(4);
                 cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 table2.addCell(cell);
 
-                float[] widths2 = {100f, 100f};
-                PdfPTable table3 = new PdfPTable(widths2);
+                float[] widths3 = {100f, 100f};
+                PdfPTable table3 = new PdfPTable(widths3);
 
                 if (cardSqlStorage.get(cardNumber) != null) {
                     table3.addCell(setTextLeft("Discount Card : "));
@@ -113,6 +120,7 @@ public class PrintPdfService {
 
                 document.add(table1);
                 document.add(table2);
+                document.add(table4);
                 document.add(table3);
             }
             document.close();
@@ -122,28 +130,6 @@ public class PrintPdfService {
         }
     }
 
-
-    private void calculation() {
-        for (Map.Entry<Integer, Integer> entry : receipt.getItems().entrySet()) {
-            Integer qty = entry.getValue();
-            double rebate = 1;
-            Item item = itemSqlStorage.get(entry.getKey());
-            String description = item.getName();
-            if (cardSqlStorage.get(cardNumber) != null && qty >= 5 && item.isOffer()) {
-                rebate = 1 - cardDiscount * rebate / 100;
-                description = description + "(discount " + cardDiscount + "%)";
-            }
-            double totalOfItems = item.getPrice() * qty * rebate;
-
-            table2.addCell(setTextLeft(String.valueOf(qty)));
-            table2.addCell(setTextLeft(description));
-            table2.addCell(setTextLeft(String.format("%.2f", item.getPrice())));
-            table2.addCell(setTextLeft(String.format("%.2f", totalOfItems)));
-
-            discountTotal = discountTotal + item.getPrice() * qty - totalOfItems;
-            total = total + totalOfItems;
-        }
-    }
 
     private void checkAllIdInReceipt() {
         for (Map.Entry<Integer, Integer> entry : receipt.getItems().entrySet()) {

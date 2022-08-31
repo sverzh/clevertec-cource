@@ -6,9 +6,7 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 
-import org.springframework.web.servlet.DispatcherServlet;
 import ru.clevertec.checkrunner.config.AppConfiguration;
-import ru.clevertec.checkrunner.servlets.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -20,13 +18,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.register(AppConfiguration.class);
-        context.setServletContext(servletContext);
         context.refresh();
 
 
         CardServlet cardServlet = (CardServlet) context.getBean("cardServlet");
         GetAllCardsServlet getAllCardsServlet = (GetAllCardsServlet) context.getBean("getAllCardsServlet");
-        GetIAllItemsServlet getIAllItemsServlet = (GetIAllItemsServlet) context.getBean("getAllItemsServlet");
+        GetAllItemsServlet getAllItemsServlet = (GetAllItemsServlet) context.getBean("getAllItemsServlet");
         ItemServlet itemServlet = (ItemServlet) context.getBean("itemServlet");
         ReceiptServlet receiptServlet = (ReceiptServlet) context.getBean("receiptServlet");
 
@@ -34,7 +31,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         ServletRegistration.Dynamic card= servletContext.addServlet("cardServlet",cardServlet);
         ServletRegistration.Dynamic cards= servletContext.addServlet("getAllCardsServlet",getAllCardsServlet);
-        ServletRegistration.Dynamic items= servletContext.addServlet("getAllItemsServlet", getIAllItemsServlet);
+        ServletRegistration.Dynamic items= servletContext.addServlet("getAllItemsServlet", getAllItemsServlet);
         ServletRegistration.Dynamic item= servletContext.addServlet("itemServlet",itemServlet);
         ServletRegistration.Dynamic receipt= servletContext.addServlet("receiptServlet",receiptServlet);
 

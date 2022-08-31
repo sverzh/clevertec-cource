@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@ComponentScan(basePackages = "ru.clevertec.checkrunner")
+@ComponentScan(basePackages = "ru.clevertec")
 public class AppConfiguration {
 }

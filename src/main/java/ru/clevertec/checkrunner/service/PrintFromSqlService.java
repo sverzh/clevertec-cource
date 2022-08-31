@@ -24,7 +24,7 @@ public class PrintFromSqlService implements PrintServiceInterface {
 
     public PrintFromSqlService(Map<Integer, Integer> paramsMap, Card card) {
         this.paramsMap = paramsMap;
-        this.cardNumber = card.getCardNumber();
+        this.cardNumber = card.getNumber();
         this.cardDiscount = card.getDiscount();
     }
 
