@@ -100,11 +100,3 @@ task('deploy') {
     }
 }
 compileJava.dependsOn(update).dependsOn(deploy)
-
-//task hello{
-//    println("hello")
-//}
-//
-//task goodbye(dependsOn:hello){
-//    println("goodbye")
-//}
