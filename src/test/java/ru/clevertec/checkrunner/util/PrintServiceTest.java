@@ -11,7 +11,7 @@ class PrintServiceTest {
     String[] parsedString = pathString.split(" ");
     StringParser stringParser = new StringParser(parsedString);
     FileItemStorage itemStorage = new FileItemStorage(parsedString[0]);
-    PrintServiceInterface printService = new PrintService(stringParser.getParsedMap(), stringParser.getCardNumber(), itemStorage.initItemStorage());
+    PrintServiceInterface printService = new PrintService(stringParser.getParsedMap(), stringParser.getCard().getCardNumber(), itemStorage.initItemStorage());
     PrintServiceProxy printServiceProxy = new PrintServiceProxy(printService);
     @Test
     void printReceiptToConsole() {

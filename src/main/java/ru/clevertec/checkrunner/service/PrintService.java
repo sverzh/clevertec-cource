@@ -7,25 +7,21 @@ import ru.clevertec.checkrunner.repository.FileCardStorage;
 import ru.clevertec.checkrunner.repository.MapStorage;
 
 import java.io.File;
-import java.io.IOException;
+
 import java.io.PrintStream;
 import java.util.Map;
 
-public class PrintService implements PrintServiceInterface{
-
+public class PrintService implements PrintServiceInterface {
 
     private final Map<Integer, Integer> paramsMap;
     private final MapStorage itemStorage;
     private final String cardNumber;
-
 
     public PrintService(Map<Integer, Integer> paramsMap, String cardNumber, MapStorage itemStorage) {
         this.paramsMap = paramsMap;
         this.itemStorage = itemStorage;
         this.cardNumber = cardNumber;
     }
-
-
 
     @Log(LoggingLevel.INFO)
     public void printReceiptToConsole() {
@@ -66,6 +62,7 @@ public class PrintService implements PrintServiceInterface{
             }
         }
     }
+
     @Log(LoggingLevel.INFO)
     public void printReceiptToFile() {
         checkAllIdInReceipt();

@@ -5,19 +5,19 @@ import ru.clevertec.checkrunner.model.Card;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StringParser {
+public class StringParserWithoutFileStorages {
     private final String[] inputData;
     private final Map<Integer, Integer> parsedMap = new HashMap<>();
     private Card card;
 
-    public StringParser(String[] args) {
+    public StringParserWithoutFileStorages(String[] args) {
         this.inputData = args;
     }
 
     public Map<Integer, Integer> getParsedMap() {
         if (inputData != null) {
-            for (int i = 2; i < inputData.length; i++) {
-                String[] str1 = inputData[i].split("-");
+            for (String inputDatum : inputData) {
+                String[] str1 = inputDatum.split("-");
                 if (str1[0].equals("card")) {
                     card = new Card(str1[1]);
                     break;
@@ -31,5 +31,6 @@ public class StringParser {
     public Card getCard() {
         return card;
     }
-
 }
+
+
