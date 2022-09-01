@@ -2,8 +2,8 @@ package ru.clevertec.checkrunner.repository;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import ru.clevertec.checkrunner.repository.filestorage.FileItemStorage;
+import ru.clevertec.checkrunner.repository.filestorage.MapStorage;
 
 class FileItemStorageTest {
     String itemListFilename  = "itemlist.txt";

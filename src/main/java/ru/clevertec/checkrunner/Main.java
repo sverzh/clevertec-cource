@@ -1,7 +1,7 @@
 package ru.clevertec.checkrunner;
 
-import ru.clevertec.checkrunner.repository.FileCardStorage;
-import ru.clevertec.checkrunner.repository.FileItemStorage;
+import ru.clevertec.checkrunner.repository.filestorage.FileCardStorage;
+import ru.clevertec.checkrunner.repository.filestorage.FileItemStorage;
 import ru.clevertec.checkrunner.service.PrintService;
 import ru.clevertec.checkrunner.service.PrintServiceInterface;
 import ru.clevertec.checkrunner.service.proxy.PrintServiceProxy;
@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         if (args.length != 0) {
             StringParser stringParser = new StringParser(args);

@@ -19,7 +19,7 @@ public class StringParserWithoutFileStorages {
             for (String inputDatum : inputData) {
                 String[] str1 = inputDatum.split("-");
                 if (str1[0].equals("card")) {
-                    card = new Card(str1[1]);
+                    card = new Card(Integer.parseInt(str1[1]));
                     break;
                 }
                 parsedMap.put(Integer.valueOf(str1[0]), Integer.valueOf(str1[1]));

@@ -19,7 +19,7 @@ public class StringParser {
             for (int i = 2; i < inputData.length; i++) {
                 String[] str1 = inputData[i].split("-");
                 if (str1[0].equals("card")) {
-                    card = new Card(str1[1]);
+                    card = new Card(Integer.valueOf(str1[1]));
                     break;
                 }
                 parsedMap.put(Integer.valueOf(str1[0]), Integer.valueOf(str1[1]));

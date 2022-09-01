@@ -3,11 +3,10 @@ package ru.clevertec.checkrunner.service;
 import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
 import ru.clevertec.checkrunner.model.Item;
-import ru.clevertec.checkrunner.repository.FileCardStorage;
-import ru.clevertec.checkrunner.repository.MapStorage;
+import ru.clevertec.checkrunner.repository.filestorage.FileCardStorage;
+import ru.clevertec.checkrunner.repository.filestorage.MapStorage;
 
 import java.io.File;
-
 import java.io.PrintStream;
 import java.util.Map;
 
@@ -15,9 +14,9 @@ public class PrintService implements PrintServiceInterface {
 
     private final Map<Integer, Integer> paramsMap;
     private final MapStorage itemStorage;
-    private final String cardNumber;
+    private final int cardNumber;
 
-    public PrintService(Map<Integer, Integer> paramsMap, String cardNumber, MapStorage itemStorage) {
+    public PrintService(Map<Integer, Integer> paramsMap, int cardNumber, MapStorage itemStorage) {
         this.paramsMap = paramsMap;
         this.itemStorage = itemStorage;
         this.cardNumber = cardNumber;
@@ -57,7 +56,7 @@ public class PrintService implements PrintServiceInterface {
                 System.out.println("DISCOUNT:                                             -" + discountTotal);
             }
             System.out.println("TOTAL:                                                " + total);
-            if (!FileCardStorage.checkCard(cardNumber) && cardNumber != null) {
+            if (!FileCardStorage.checkCard(cardNumber) && cardNumber != 0) {
                 System.out.println("Notice: Card with number " + cardNumber + " not found!");
             }
         }
@@ -99,7 +98,7 @@ public class PrintService implements PrintServiceInterface {
                     fw.println("DISCOUNT:                                             -" + discountTotal);
                 }
                 fw.println("TOTAL:                                                " + total);
-                if (!FileCardStorage.checkCard(cardNumber) && cardNumber != null) {
+                if (!FileCardStorage.checkCard(cardNumber) && cardNumber != 0) {
                     System.out.println("Notice: Card with number " + cardNumber + " not found!");
                 }
             }

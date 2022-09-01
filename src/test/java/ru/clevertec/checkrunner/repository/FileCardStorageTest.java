@@ -2,10 +2,7 @@ package ru.clevertec.checkrunner.repository;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import ru.clevertec.checkrunner.repository.filestorage.FileCardStorage;
 
 class FileCardStorageTest {
     String cardListFileName = "cardlist.txt";
@@ -25,7 +22,7 @@ class FileCardStorageTest {
 
     @Test
     void checkCard() {
-        String cardNumber = "1004";
+        int cardNumber = 1004;
         cardStorage.initCardList();
         Assertions.assertTrue(FileCardStorage.checkCard(cardNumber));
     }
