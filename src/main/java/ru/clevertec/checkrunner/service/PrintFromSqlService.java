@@ -4,8 +4,8 @@ import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
 import ru.clevertec.checkrunner.model.Card;
 import ru.clevertec.checkrunner.model.Item;
-import ru.clevertec.checkrunner.repository.CardSqlStorage;
-import ru.clevertec.checkrunner.repository.ItemSqlStorage;
+import ru.clevertec.checkrunner.repository.JDBC.CardStorageJDBC;
+import ru.clevertec.checkrunner.repository.JDBC.ItemStorageJDBC;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -15,8 +15,8 @@ public class PrintFromSqlService implements PrintServiceInterface {
     private final Map<Integer, Integer> paramsMap;
     private final int cardNumber;
     private final int cardDiscount;
-    private final ItemSqlStorage itemSqlStorage = new ItemSqlStorage();
-    private final CardSqlStorage cardSqlStorage = new CardSqlStorage();
+    private final ItemStorageJDBC itemStorageJDBC = new ItemStorageJDBC();
+    private final CardStorageJDBC cardSqlStorage = new CardStorageJDBC();
     PrintStream fw;
     String pathToFile = new File(System.getProperty("user.dir")).getPath() + "\\receipt.txt";
     private double total = 0;
@@ -37,14 +37,14 @@ public class PrintFromSqlService implements PrintServiceInterface {
             System.out.println("QTY        DESCRIPTION                  PRICE         TOTAL");
             calculation();
             System.out.println("-----------------------------------------------------------------");
-            if (cardSqlStorage.get(cardNumber) != null) {
+            if (cardSqlStorage.findById(cardNumber) != null) {
                 System.out.println("Discount Card : " + cardNumber);
             }
             if (discountTotal != 0) {
                 System.out.printf("DISCOUNT:                                             %.2f\n", discountTotal);
             }
             System.out.println("TOTAL:                                                " + total);
-            if (cardSqlStorage.get(cardNumber) == null && cardNumber != 0) {
+            if (cardSqlStorage.findById(cardNumber) == null && cardNumber != 0) {
                 System.out.println("Notice: Card with number " + cardNumber + " not found!");
             }
         }
@@ -62,14 +62,14 @@ public class PrintFromSqlService implements PrintServiceInterface {
                 fw.println("QTY        DESCRIPTION                  PRICE         TOTAL");
                 calculation();
                 fw.println("-----------------------------------------------------------------");
-                if (cardSqlStorage.get(cardNumber) != null) {
+                if (cardSqlStorage.findById(cardNumber) != null) {
                     fw.println("Discount Card : " + cardNumber);
                 }
                 if (discountTotal != 0) {
                     fw.printf("DISCOUNT:                                              %.2f\n", discountTotal);
                 }
                 fw.println("TOTAL:                                                " + total);
-                if (cardSqlStorage.get(cardNumber) == null && cardNumber != 0) {
+                if (cardSqlStorage.findById(cardNumber) == null && cardNumber != 0) {
                     System.out.println("Notice: Card with number " + cardNumber + " not found!");
                 }
             }
@@ -83,7 +83,7 @@ public class PrintFromSqlService implements PrintServiceInterface {
 
     private void checkAllIdInReceipt() {
         for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
-            Item item = itemSqlStorage.get(entry.getKey());
+            Item item = itemStorageJDBC.findById(entry.getKey());
             if (item == null) {
                 throw new RuntimeException("Item not found");
             }
@@ -95,9 +95,9 @@ public class PrintFromSqlService implements PrintServiceInterface {
         for (Map.Entry<Integer, Integer> entry : paramsMap.entrySet()) {
             Integer qty = entry.getValue();
             double rebate = 1;
-            Item item = itemSqlStorage.get(entry.getKey());
+            Item item = itemStorageJDBC.findById(entry.getKey());
             String description = item.getName();
-            if (cardSqlStorage.get(cardNumber) != null && qty >= 5 && item.isOffer()) {
+            if (cardSqlStorage.findById(cardNumber) != null && qty >= 5 && item.isOffer()) {
                 rebate = 1 - cardDiscount * rebate / 100;
                 description = description + "(discount " + cardDiscount + "%)";
             }

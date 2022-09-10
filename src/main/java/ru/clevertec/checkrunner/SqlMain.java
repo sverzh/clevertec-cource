@@ -1,12 +1,9 @@
 package ru.clevertec.checkrunner;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.WebApplicationContext;
-import ru.clevertec.checkrunner.repository.CardSqlStorage;
-import ru.clevertec.checkrunner.repository.ItemSqlStorage;
+import ru.clevertec.checkrunner.repository.JDBC.CardStorageJDBC;
+import ru.clevertec.checkrunner.repository.JDBC.ItemStorageJDBC;
 import ru.clevertec.checkrunner.service.PrintFromSqlService;
-import ru.clevertec.checkrunner.service.PrintPdfService;
 import ru.clevertec.checkrunner.service.PrintServiceInterface;
 import ru.clevertec.checkrunner.service.proxy.PrintServiceProxy;
 import ru.clevertec.checkrunner.util.StringParserWithoutFileStorages;
@@ -17,8 +14,8 @@ import java.io.InputStreamReader;
 public class SqlMain {
     public static void main(String[] args) throws Exception {
 
-        ItemSqlStorage itemSqlStorage;
-        CardSqlStorage cardSqlStorage;
+        ItemStorageJDBC itemStorageJDBC;
+        CardStorageJDBC cardSqlStorage;
 
         String line = "3-2 4-5 2-5 card-1234";
         String[] args1 = line.split(" ");
