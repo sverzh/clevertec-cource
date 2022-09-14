@@ -1,6 +1,8 @@
 package ru.clevertec.checkrunner.servlets;
 
 import com.google.gson.Gson;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.clevertec.checkrunner.model.Item;
 import ru.clevertec.checkrunner.repository.ItemSqlStorage;
 
@@ -12,9 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/api/item/")
+@Component
+@RequiredArgsConstructor
 public class ItemServlet extends HttpServlet {
-    final ItemSqlStorage itemSqlStorage = new ItemSqlStorage();
+    final ItemSqlStorage itemSqlStorage;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

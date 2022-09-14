@@ -1,6 +1,8 @@
 package ru.clevertec.checkrunner.servlets;
 
 import com.google.gson.Gson;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.clevertec.checkrunner.model.Card;
 import ru.clevertec.checkrunner.repository.CardSqlStorage;
 
@@ -11,8 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@Component
+@RequiredArgsConstructor
 public class CardServlet extends HttpServlet {
-    final CardSqlStorage cardSqlStorage = new CardSqlStorage();
+
+    final CardSqlStorage cardSqlStorage;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final String s = new Gson().toJson(cardSqlStorage.get(Integer.parseInt(req.getParameter("cardnumber"))));
@@ -24,7 +30,7 @@ public class CardServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        cardSqlStorage.delete(cardSqlStorage.get(Integer.parseInt(req.getParameter("cardnumber"))).getCardNumber());
+        cardSqlStorage.delete(cardSqlStorage.get(Integer.parseInt(req.getParameter("cardnumber"))).getNumber());
         resp.setStatus(200);
     }
 

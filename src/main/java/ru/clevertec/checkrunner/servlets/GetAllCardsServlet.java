@@ -1,6 +1,8 @@
 package ru.clevertec.checkrunner.servlets;
 
 import com.google.gson.Gson;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.clevertec.checkrunner.model.Card;
 import ru.clevertec.checkrunner.model.Item;
 import ru.clevertec.checkrunner.repository.CardSqlStorage;
@@ -15,9 +17,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet("/api/cards")
+@Component
+@RequiredArgsConstructor
 public class GetAllCardsServlet extends HttpServlet {
-    final CardSqlStorage cardSqlStorage = new CardSqlStorage();
+    final CardSqlStorage cardSqlStorage;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

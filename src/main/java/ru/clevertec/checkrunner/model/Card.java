@@ -1,11 +1,18 @@
 package ru.clevertec.checkrunner.model;
 
-import lombok.Data;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Component
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Card {
 
-    private final int cardNumber;
-    private int discount=5;
+    private int number;
+    private int discount;
 
 }

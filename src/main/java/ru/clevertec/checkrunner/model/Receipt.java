@@ -1,21 +1,16 @@
 package ru.clevertec.checkrunner.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Item {
-
-    private  int id;
-    private String name;
-    private double price;
-    private boolean offer;
-
-
+public class Receipt {
+    private  Map<Integer,Integer> items = new HashMap<>();
+    private  Card card;
 }
