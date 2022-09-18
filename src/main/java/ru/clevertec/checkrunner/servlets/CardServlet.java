@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 @RequiredArgsConstructor
 public class CardServlet extends HttpServlet {
 
-    final CardService cardService;
+    private final CardService cardService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

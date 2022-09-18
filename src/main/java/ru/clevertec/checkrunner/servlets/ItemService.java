@@ -21,7 +21,7 @@ public class ItemService {
         return itemStorageDataJpa.findAll(PageRequest.of(page, size));
     }
 
-    Item update(Item item) {
+    public Item update(Item item) {
         Optional<Item> optionalItem = itemStorageDataJpa.findByName(item.getName());
         if (optionalItem.isPresent()) {
             Item target = optionalItem.get();
@@ -32,15 +32,15 @@ public class ItemService {
         return item;
     }
 
-    public Item findById(int id){
+    public Item findById(int id) {
         return itemStorageDataJpa.findById(id).get();
     }
 
-    public Item save(Item item){
+    public Item save(Item item) {
         return itemStorageDataJpa.save(item);
     }
 
-    void delete(int id){
+    public void delete(int id) {
         itemStorageDataJpa.deleteById(id);
     }
 
