@@ -10,8 +10,6 @@ import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
 import ru.clevertec.checkrunner.model.Item;
 import ru.clevertec.checkrunner.model.Receipt;
-import ru.clevertec.checkrunner.servlets.CardService;
-import ru.clevertec.checkrunner.servlets.ItemService;
 
 import java.io.File;
 import java.io.FileOutputStream;

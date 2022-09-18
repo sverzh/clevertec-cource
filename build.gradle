@@ -6,6 +6,8 @@ plugins {
     id 'war'
     id 'java'
     id 'maven-publish'
+    id 'org.springframework.boot' version '2.7.3'
+    id "io.spring.dependency-management" version '1.0.11.RELEASE'
     id 'io.freefair.aspectj.post-compile-weaving' version '5.3.0'
     id 'org.liquibase.gradle' version '2.0.4'
     id "io.freefair.lombok" version "6.5.0.3"
@@ -32,61 +34,21 @@ publishing {
 }
 
 
-class CustomTask extends DefaultTask {
-
-    @Input
-    String sourceUrl
-
-    @OutputFile
-    File target
-
-    @TaskAction
-    void download() {
-        try {
-            ant.get(src: sourceUrl, dest: target)
-        }
-        catch (Exception e) {
-            println(e)
-        }
-    }
-
-}
-task downloadcheckimage(type: CustomTask){
-    sourceUrl = 'https://drive.google.com/uc?export=download&id=1SEkDJtAN3AdftDVuGp2CtydNIOciP5cg'
-    target = new File('src/main/resources/checkimagefile.jpg')
-}
 
 dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.0'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.0'
-    // https://mvnrepository.com/artifact/org.postgresql/postgresql
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.4.0'
     implementation 'org.projectlombok:lombok:1.18.18'
-    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
-    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.3'
     liquibaseRuntime 'org.postgresql:postgresql:42.3.6'
     liquibaseRuntime 'org.liquibase:liquibase-core:4.14.0'
-    // https://mvnrepository.com/artifact/io.freefair.gradle/lombok-plugin
     implementation group: 'io.freefair.gradle', name: 'lombok-plugin', version: '6.5.0.3'
-    // https://mvnrepository.com/artifact/org.springframework/spring-core
-    implementation 'org.springframework:spring-core:5.3.22'
-// https://mvnrepository.com/artifact/org.springframework/spring-context
-    implementation 'org.springframework:spring-context:5.3.22'
-    // https://mvnrepository.com/artifact/org.springframework/spring-context-support
-    implementation 'org.springframework:spring-context-support:5.3.22'
-    // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
-    implementation 'org.springframework:spring-webmvc:5.3.22'
-    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa
-    implementation 'org.springframework.data:spring-data-jpa:2.7.2'
-    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     implementation 'org.hibernate:hibernate-core:5.6.11.Final'
-
-
-
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.3'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.3'
 
 
 }
@@ -95,16 +57,3 @@ test {
     useJUnitPlatform()
 }
 
-task('deploy') {
-    liquibase {
-        activities {
-            main {
-                changeLogFile "src/main/resources/db/changelog/db.changelog-master.xml"
-                url "jdbc:postgresql://localhost:5432/postgres"
-                username "postgres"
-                password "postgres"
-            }
-        }
-    }
-}
-compileJava.dependsOn(update).dependsOn(deploy)

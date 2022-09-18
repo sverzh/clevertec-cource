@@ -14,5 +14,7 @@ public interface ItemStorageDataJpa extends JpaRepository<Item, Integer> {
     Page<Item> findAll(Pageable pageable);
 
     Optional<Item> findByName(String name);
+
+    void deleteById(int id);
 }
 

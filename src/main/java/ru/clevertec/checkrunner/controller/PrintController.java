@@ -1,33 +1,27 @@
-package ru.clevertec.checkrunner.servlets;
+package ru.clevertec.checkrunner.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.*;
 import ru.clevertec.checkrunner.model.Receipt;
 import ru.clevertec.checkrunner.service.PrintPdfService;
 import ru.clevertec.checkrunner.util.StringParserWithoutFileStorages;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-
-@Component
+@RestController
+@RequestMapping({"/api/"})
 @RequiredArgsConstructor
-public class ReceiptServlet extends HttpServlet {
+public class PrintController {
+
     private final PrintPdfService pdfService;
 
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String params = req.getParameter("params");
-        String[] args1 = params.split(" ");
-
-
+    @GetMapping({"/receipt/{arguments}"})
+    public void printPdf(@PathVariable String arguments, HttpServletResponse resp) throws IOException {
+        String[] args1 = arguments.split(" ");
         if (args1.length != 0) {
             StringParserWithoutFileStorages stringParser = new StringParserWithoutFileStorages(args1);
             Receipt receipt = stringParser.getReceipt();
@@ -47,5 +41,7 @@ public class ReceiptServlet extends HttpServlet {
             out.close();
 
         } else resp.setStatus(404);
+
     }
+
 }
