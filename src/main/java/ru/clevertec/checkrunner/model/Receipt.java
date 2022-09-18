@@ -1,5 +1,6 @@
 package ru.clevertec.checkrunner.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,10 @@ import java.util.Map;
 
 @Component
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Receipt {
-    private  Map<Integer,Integer> items = new HashMap<>();
-    private  Card card;
+
+    private Map<Integer, Integer> items = new HashMap<>();
+    private Card card;
 }

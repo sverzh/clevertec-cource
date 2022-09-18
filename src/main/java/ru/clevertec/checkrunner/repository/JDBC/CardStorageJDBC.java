@@ -1,25 +1,26 @@
-package ru.clevertec.checkrunner.repository;
+package ru.clevertec.checkrunner.repository.JDBC;
 
 
 import org.springframework.stereotype.Repository;
 import ru.clevertec.checkrunner.exception.StorageException;
 import ru.clevertec.checkrunner.model.Card;
+import ru.clevertec.checkrunner.repository.Storage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
-public class CardSqlStorage extends SqlStorage implements Storage<Card> {
+
+public class CardStorageJDBC extends StorageJDBC implements Storage<Card> {
     private static final Integer PAGE_SIZE_DEFAULT = 20;
     private static final Integer PAGES_DEFAULT = 0;
 
-    public CardSqlStorage() {
+    public CardStorageJDBC() {
         super();
     }
 
-    public Card get(int cardNumber) {
+    public Card findById(int cardNumber) {
         return sqlHelper.transactionalExecute(conn -> {
             Card card;
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM cardnumbers where cardNumber=?")) {
@@ -36,10 +37,10 @@ public class CardSqlStorage extends SqlStorage implements Storage<Card> {
         });
     }
 
-    public void add(Card card) {
+    public void save(Card card) {
         sqlHelper.transactionalExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("INSERT INTO cardnumbers (cardnumber) VALUES(?)")) {
-                if (get(card.getNumber()) == null) {
+                if (findById(card.getNumber()) == null) {
                     ps.setInt(1, card.getNumber());
                     ps.execute();
                 }
