@@ -10,8 +10,8 @@ import ru.clevertec.checkrunner.annotation.Log;
 import ru.clevertec.checkrunner.annotation.LoggingLevel;
 import ru.clevertec.checkrunner.model.Item;
 import ru.clevertec.checkrunner.model.Receipt;
-import ru.clevertec.checkrunner.repository.CardSqlStorage;
-import ru.clevertec.checkrunner.repository.ItemSqlStorage;
+import ru.clevertec.checkrunner.servlets.CardService;
+import ru.clevertec.checkrunner.servlets.ItemService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,14 +23,14 @@ import java.util.Map;
 
 @Service
 public class PrintPdfService {
-    private Receipt receipt;
-    private final ItemSqlStorage itemSqlStorage;
-    private final CardSqlStorage cardSqlStorage;
+    private final ItemService itemService;
+    private final CardService cardService;
     private final String pathToFile = new File("D:\\project\\src\\main\\resources\\receipt.pdf").getPath();
+    private Receipt receipt;
 
-    public PrintPdfService(ItemSqlStorage itemSqlStorage, CardSqlStorage cardSqlStorage) {
-        this.itemSqlStorage = itemSqlStorage;
-        this.cardSqlStorage = cardSqlStorage;
+    public PrintPdfService(ItemService itemService, CardService cardService) {
+        this.itemService = itemService;
+        this.cardService = cardService;
     }
 
 
@@ -72,9 +72,9 @@ public class PrintPdfService {
                 for (Map.Entry<Integer, Integer> entry : receipt.getItems().entrySet()) {
                     Integer qty = entry.getValue();
                     double rebate = 1;
-                    Item item = itemSqlStorage.get(entry.getKey());
+                    Item item = itemService.findById(entry.getKey());
                     String description = item.getName();
-                    if (cardSqlStorage.get(cardNumber) != null && qty >= 5 && item.isOffer()) {
+                    if (cardService.findByNumber(cardNumber) != null && qty >= 5 && item.isOffer()) {
                         rebate = 1 - cardDiscount * rebate / 100;
                         description = description + "(discount " + cardDiscount + "%)";
                     }
@@ -98,7 +98,7 @@ public class PrintPdfService {
                 float[] widths3 = {100f, 100f};
                 PdfPTable table3 = new PdfPTable(widths3);
 
-                if (cardSqlStorage.get(cardNumber) != null) {
+                if (cardService.findByNumber(cardNumber) != null) {
                     table3.addCell(setTextLeft("Discount Card : "));
                     table3.addCell(setTextLeft(String.valueOf(cardNumber)));
 
@@ -110,7 +110,7 @@ public class PrintPdfService {
                 table3.addCell(setTextLeft("TOTAL: "));
                 table3.addCell(setTextCenter(String.format("                        %.2f", total)));
 
-                if (cardSqlStorage.get(cardNumber) == null && cardNumber != 0) {
+                if (cardService.findByNumber(cardNumber) == null && cardNumber != 0) {
                     cell = new PdfPCell(new Paragraph("Notice: Card with number " + cardNumber + " not found!"));
                     cell.setBorder(Rectangle.NO_BORDER);
                     cell.setColspan(2);
@@ -133,7 +133,7 @@ public class PrintPdfService {
 
     private void checkAllIdInReceipt() {
         for (Map.Entry<Integer, Integer> entry : receipt.getItems().entrySet()) {
-            Item item = itemSqlStorage.get(entry.getKey());
+            Item item = itemService.findById(entry.getKey());
             if (item == null) {
                 throw new RuntimeException("Item not found");
             }

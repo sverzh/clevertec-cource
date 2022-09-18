@@ -1,10 +1,11 @@
 package ru.clevertec.checkrunner.servlets;
 
 import com.google.gson.Gson;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.clevertec.checkrunner.model.Card;
-import ru.clevertec.checkrunner.repository.CardSqlStorage;
+import ru.clevertec.checkrunner.repository.springdata.CardStorageDataJpa;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,11 +18,11 @@ import java.io.PrintWriter;
 @RequiredArgsConstructor
 public class CardServlet extends HttpServlet {
 
-    final CardSqlStorage cardSqlStorage;
+    private final CardService cardService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final String s = new Gson().toJson(cardSqlStorage.get(Integer.parseInt(req.getParameter("cardnumber"))));
+        final String s = new Gson().toJson(cardService.findByNumber(Integer.parseInt(req.getParameter("cardnumber"))));
         try (PrintWriter writer = resp.getWriter()) {
             writer.write(s);
             resp.setStatus(200);
@@ -30,14 +31,14 @@ public class CardServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        cardSqlStorage.delete(cardSqlStorage.get(Integer.parseInt(req.getParameter("cardnumber"))).getNumber());
+        cardService.delete(Integer.parseInt(req.getParameter("cardnumber")));
         resp.setStatus(200);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Card source = new Gson().fromJson(req.getReader(), Card.class);
-        cardSqlStorage.add(source);
+        cardService.save(source);
         try (PrintWriter writer = resp.getWriter()){
             writer.write(source.toString());
             resp.setStatus(201);
